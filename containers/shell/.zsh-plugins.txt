@@ -1,0 +1,6 @@
+kube-ps1
+kubectl
+kubectx
+minikube
+fluxcd
+helm
