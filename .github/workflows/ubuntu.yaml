@@ -108,3 +108,4 @@ jobs:
             etma/devcontainer-kube
             etma/devcontainer-kube:${{ steps.vars.outputs.version }}
             etma/devcontainer-kube:${{ steps.vars.outputs.ubuntu_version }}
+

@@ -107,3 +107,4 @@ jobs:
           tags: |
             etma/devcontainer-kube:${{ steps.vars.outputs.version }}
             etma/devcontainer-kube:${{ steps.vars.outputs.alpine_version }}
+
