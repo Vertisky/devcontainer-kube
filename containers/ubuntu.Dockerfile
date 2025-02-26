@@ -1,20 +1,21 @@
-ARG KUBECTL_VERSION=1.26.0
-ARG HELM_VERSION=3.11.0
-ARG KUBECTX_VERSION=0.9.4
-ARG MINIKUBE_VERSION=1.29.0
-ARG KUSTOMIZE_VERSION=4.5.7
-ARG K9S_VERSION=0.27.2
-ARG KIND_VERSION=0.17.0
-ARG KUBE_CAPACITY_VERSION=v0.7.3
-ARG FLUX2_VERSION=0.38.3
-ARG OIDC_LOGIN_VERSION=v1.26.0
-ARG KUBESPY_VERSION=0.6.1
-ARG KUBECONFORM_VERSION=0.5.0
-ARG POPEYE_VERSION=v0.10.1
-ARG KUBE_SCORE_VERSION=1.16.1
-ARG KUBE_LINTER_VERSION=0.6.0
+ARG KUBECTL_VERSION=1.32.2
+ARG HELM_VERSION=3.17.1
+ARG KUBECTX_VERSION=0.9.5
+ARG MINIKUBE_VERSION=1.35.0
+ARG KUSTOMIZE_VERSION=5.6.0
+ARG K9S_VERSION=0.40.5
+ARG KIND_VERSION=0.27.0
+# kube capacity can't go above v0.7.0 until the plugin has been fixed.
+ARG KUBE_CAPACITY_VERSION=v0.7.0
+ARG FLUX2_VERSION=2.5.1
+ARG OIDC_LOGIN_VERSION=v1.32.2
+ARG KUBESPY_VERSION=0.6.3
+ARG KUBECONFORM_VERSION=0.6.7
+ARG POPEYE_VERSION=0.22.1
+ARG KUBE_SCORE_VERSION=1.19.0
+ARG KUBE_LINTER_VERSION=v0.7.2
 
-FROM etma/devcontainer-base:ubuntu-v1.2.0
+FROM etma/devcontainer-base:ubuntu-v2.0.3
 ARG VERSION
 ARG COMMIT
 ARG BUILD_DATE
@@ -48,33 +49,21 @@ LABEL \
     org.opencontainers.image.revision=$COMMIT \
     org.opencontainers.image.created=$BUILD_DATE
 
-# COPY ./containers/shell/*.sh /root/
-
-# RUN chmod +x /root/*.sh
-
-COPY ./containers/shell/.zsh-plugins.txt /tmp/.new-zsh-plugins.txt
-
-# append the content of /tmp/.new-zsh-plugins.txt to /root/.zsh-plugins.txt
-RUN cat /tmp/.new-zsh-plugins.txt >> /root/.zsh-plugins.txt
-
-
 # Install asdf base plugins
-RUN touch /root/.tool-versions
-# RUN /root/.asdf/bin/asdf plugin add docker-compose-v1 && /root/.asdf/bin/asdf install docker-compose-v1 ${DOCKER_COMPOSE_VERSION} && /root/.asdf/bin/asdf global docker-compose-v1 ${DOCKER_COMPOSE_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kubectl && /root/.asdf/bin/asdf install kubectl ${KUBECTL_VERSION} && /root/.asdf/bin/asdf global kubectl ${KUBECTL_VERSION}
-RUN /root/.asdf/bin/asdf plugin add helm && /root/.asdf/bin/asdf install helm ${HELM_VERSION} && /root/.asdf/bin/asdf global helm ${HELM_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kubectx && /root/.asdf/bin/asdf install kubectx ${KUBECTX_VERSION} && /root/.asdf/bin/asdf global kubectx ${KUBECTX_VERSION}
-RUN /root/.asdf/bin/asdf plugin add minikube && /root/.asdf/bin/asdf install minikube ${MINIKUBE_VERSION} && /root/.asdf/bin/asdf global minikube ${MINIKUBE_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kustomize && /root/.asdf/bin/asdf install kustomize ${KUSTOMIZE_VERSION} && /root/.asdf/bin/asdf global kustomize ${KUSTOMIZE_VERSION}
-RUN /root/.asdf/bin/asdf plugin add k9s && /root/.asdf/bin/asdf install k9s ${K9S_VERSION} && /root/.asdf/bin/asdf global k9s ${K9S_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kind && /root/.asdf/bin/asdf install kind ${KIND_VERSION} && /root/.asdf/bin/asdf global kind ${KIND_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kube-capacity && /root/.asdf/bin/asdf install kube-capacity ${KUBE_CAPACITY_VERSION} && /root/.asdf/bin/asdf global kube-capacity ${KUBE_CAPACITY_VERSION}
-RUN /root/.asdf/bin/asdf plugin add flux2 && /root/.asdf/bin/asdf install flux2 ${FLUX2_VERSION} && /root/.asdf/bin/asdf global flux2 ${FLUX2_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kubespy && /root/.asdf/bin/asdf install kubespy ${KUBESPY_VERSION} && /root/.asdf/bin/asdf global kubespy ${KUBESPY_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kubeconform && /root/.asdf/bin/asdf install kubeconform ${KUBECONFORM_VERSION} && /root/.asdf/bin/asdf global kubeconform ${KUBECONFORM_VERSION}
-RUN /root/.asdf/bin/asdf plugin add popeye && /root/.asdf/bin/asdf install popeye ${POPEYE_VERSION} && /root/.asdf/bin/asdf global popeye ${POPEYE_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kube-score && /root/.asdf/bin/asdf install kube-score ${KUBE_SCORE_VERSION} && /root/.asdf/bin/asdf global kube-score ${KUBE_SCORE_VERSION}
-RUN /root/.asdf/bin/asdf plugin add kube-linter && /root/.asdf/bin/asdf install kube-linter ${KUBE_LINTER_VERSION} && /root/.asdf/bin/asdf global kube-linter ${KUBE_LINTER_VERSION}
+RUN asdf plugin add kubectl && asdf install kubectl ${KUBECTL_VERSION} && asdf set -u kubectl ${KUBECTL_VERSION}
+RUN asdf plugin add helm && asdf install helm ${HELM_VERSION} && asdf set -u helm ${HELM_VERSION}
+RUN asdf plugin add kubectx && asdf install kubectx ${KUBECTX_VERSION} && asdf set -u kubectx ${KUBECTX_VERSION}
+RUN asdf plugin add minikube && asdf install minikube ${MINIKUBE_VERSION} && asdf set -u minikube ${MINIKUBE_VERSION}
+RUN asdf plugin add kustomize && asdf install kustomize ${KUSTOMIZE_VERSION} && asdf set -u kustomize ${KUSTOMIZE_VERSION}
+RUN asdf plugin add k9s && asdf install k9s ${K9S_VERSION} && asdf set -u k9s ${K9S_VERSION}
+RUN asdf plugin add kind && asdf install kind ${KIND_VERSION} && asdf set -u kind ${KIND_VERSION}
+RUN asdf plugin add kube-capacity && asdf install kube-capacity ${KUBE_CAPACITY_VERSION} && asdf set -u kube-capacity ${KUBE_CAPACITY_VERSION}
+RUN asdf plugin add flux2 && asdf install flux2 ${FLUX2_VERSION} && asdf set -u flux2 ${FLUX2_VERSION}
+RUN asdf plugin add kubespy && asdf install kubespy ${KUBESPY_VERSION} && asdf set -u kubespy ${KUBESPY_VERSION}
+RUN asdf plugin add kubeconform && asdf install kubeconform ${KUBECONFORM_VERSION} && asdf set -u kubeconform ${KUBECONFORM_VERSION}
+RUN asdf plugin add popeye && asdf install popeye ${POPEYE_VERSION} && asdf set -u popeye ${POPEYE_VERSION}
+RUN asdf plugin add kube-score && asdf install kube-score ${KUBE_SCORE_VERSION} && asdf set -u kube-score ${KUBE_SCORE_VERSION}
+RUN asdf plugin add kube-linter && asdf install kube-linter ${KUBE_LINTER_VERSION} && asdf set -u kube-linter ${KUBE_LINTER_VERSION}
 
 RUN if [ -z "$PLATFORM" ]; then PLATFORM=$(uname -m); fi && \
     if [ "$PLATFORM" = "x86_64" ]; then PLATFORM="amd64"; fi && \
