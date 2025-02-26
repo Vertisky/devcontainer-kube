@@ -49,6 +49,8 @@ LABEL \
     org.opencontainers.image.revision=$COMMIT \
     org.opencontainers.image.created=$BUILD_DATE
 
+RUN apt-get update && apt-get install -y curl tar unzip
+
 # Install asdf base plugins
 RUN asdf plugin add kubectl && asdf install kubectl ${KUBECTL_VERSION} && asdf set -u kubectl ${KUBECTL_VERSION}
 RUN asdf plugin add helm && asdf install helm ${HELM_VERSION} && asdf set -u helm ${HELM_VERSION}
